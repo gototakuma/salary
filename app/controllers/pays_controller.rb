@@ -9,7 +9,7 @@ class PaysController < ApplicationController
     @user = User.find(params[:user_id])
     @pay = Pay.find(params[:id])
     if @pay.update_attributes(pay_params) 
-      flash[:sucess] = "シフト時間保存しました。"
+      flash[:success] = "シフト時間保存しました。"
       redirect_to @user
     end
   end

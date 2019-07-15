@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @pay = Pay.find(params[:id])
     if params[:first_day].nil?
       @first_day = Date.today.beginning_of_month
     else

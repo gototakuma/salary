@@ -1,39 +1,41 @@
-<% provide(:title, @user.name) %>
 <div>
   <table class="table table-bordered table-condensed user-table">
     <tr>
       <td>
         <%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),
                          class: "btn btn-xs btn-primary" %>
-        &emsp;<%= @first_day.to_s(:year_month) %>　時間管理表&emsp;
+        &emsp;<%= @first_day.to_s(:year_month) %>&emsp;
         <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
                          class: "btn btn-xs btn-primary" %>
       </td>
-      <td>指定勤務時間</td>
-      <td>基本時間</td>
-      <td>月初日</td>
-    </tr>
-
-    <tr>
-      <td>所属</td>
       <td>名前：<%= @user.name %></td>
-      <td>出勤日数</td>
-      <td>月末日</td>
+      <td>基本給: </td>
+      <td>出勤日数：</td>
+      <td>総労働時間：</td>
+      <td>給料: </td>
+      <td>扶養まで: </td>
     </tr>
   </table>
 </div>
 
+<!--モーダル-->
+<% @dates.each do |day| %>
+  <% if day.worked_on == Date.today && day.started.nil?%>
+    <a class="btn btn-primary" href="/users/<%=@user.id%>/pays/<%=day.worked_on%>/<%=day.id%>/show">クイック入力</a>
+  <%end%>
+<%end%>
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
       <tr>
         <th>日付</th>
         <th>曜日</th>
-        <th>勤怠登録</th>
         <th>出勤時間</th>
         <th>退勤時間</th>
         <th>在社時間</th>
+        <th>給料</th>
         <th>備考</th>
+        <td>編集</td>
       </tr>
     </thead>
 
@@ -47,6 +49,7 @@
           <td></td>
           <td></td>
           <td></td>
+          <td><%= link_to"編集",'#',class: "btn btn-primary" %></td>
         </tr>
       <% end %>
     </tbody>
