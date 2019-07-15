@@ -21,35 +21,35 @@
 <!--モーダル-->
 <% @dates.each do |day| %>
   <%= fields_for"pays[]", day do |af| %>
-  <% if day.worked_on == Date.today #&& day.started.nil?%>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">モーダル入力</button>
-  <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1>今日のシフト時間入力</h1>
-        </div>
-        <div class="modal-body">
-        <%= form_for(@pay,url: update_pays_show_path(params: {id: @user.id})) do |f| %>
+    <% if day.worked_on == Date.today #&& day.started.nil?%>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">クイック入力</button>
+      <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1>今日のシフト時間入力</h1>
+            </div>
+            <div class="modal-body">
+              <%= form_for(@user,url: update_pays_new_path(params: {id: @user.id})) do |f| %>
           
-          <%= day.worked_on.to_s(:date) %>
-          
-          <%= f.label :started %>
-          <%= af.time_field :started %>
+              <%= day.worked_on.to_s(:date) %>
+            
+              <%= f.label :started %>
+              <%= af.time_field :started %>
 
-          <%= f.label :finished %>
-          <%= af.time_field :finished %>
+              <%= f.label :finished %>
+              <%= af.time_field :finished %>
+            </div>
+          <div class="modal-footer">
+              <%= f.submit "保存", class: "btn btn-primary" %>
+          </div>
+              <%end%><!--form_for-->
+          </div>
         </div>
-        <div class="modal-footer">
-          <%= f.submit "保存", class: "btn btn-primary" %>
-        </div>
-        <%end%>
       </div>
-    </div>
-  </div>
-  <%end%>
-  <%end%>
-<%end%>
+    <%end%><!--if-->
+  <%end%><!--fields_for-->
+<%end%><!--@dates-->
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
