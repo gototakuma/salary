@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190715055400) do
+ActiveRecord::Schema.define(version: 20190715055631) do
 
   create_table "pays", force: :cascade do |t|
     t.datetime "started"
@@ -19,6 +19,9 @@ ActiveRecord::Schema.define(version: 20190715055400) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "salary"
+    t.integer "overtime_pay"
+    t.datetime "overtime"
     t.index ["user_id"], name: "index_pays_on_user_id"
   end
 
