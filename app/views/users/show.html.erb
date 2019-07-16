@@ -11,7 +11,7 @@
       <td>名前：<%= @user.name %></td>
       <td>基本給:<%= @user.basic_salary %>円</td>
       <td>出勤日数：<%= @workdays %></td>
-      <td>総労働時間：</td>
+      <td>総労働時間: </td>
       <td>給料: </td>
       <td>扶養まで: </td>
     </tr>
@@ -72,12 +72,23 @@
           <td><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
           <td><%= day.started.to_s(:hourmin) if day.started.present? %></td>
           <td><%= day.finished.to_s(:hourmin) if day.finished.present? %></td>
-          <td></td>
+          <td>
+            <% if day.started.present? && day.finished.present? %>
+              <%= working_times(day.started, day.finished) %>
+              <% seconds = (day.finished - day.started).to_i %>
+              <% @total_seconds = @total_seconds.to_i + seconds %>
+            <%end%>
+          </td>
           <td></td>
           <td></td>
           <td><%= link_to"編集",'#',class: "btn btn-primary" %></td>
         </tr>
       <% end %>
     </tbody>
+    <tfoot>
+      <tr>
+        <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
+      </tr>
+    </tfoot>
   </table>
 </div>
