@@ -4,15 +4,16 @@
       <h1>シフト時間の変更</h1>
     </div>
     <div class="modal-body">
-      <%= form_for(@pay,url: update_pays_path(params: {id: @user.id})) do |f| %>
+      <%= form_for(@pay ,url: update_pays_path(params: {id: @user.id})) do |f| %>
+        
         <%= f.label :started %>
-        <%= f.time_field :started %>
+        <%= af.time_field :started %>
 
         <%= f.label :finished %>
-        <%= f.time_field :finished %>
+        <%= af.time_field :finished %>
+        
+        <%= @pay.id %>
 
-    </div>
-    <div class="modal-footer">
         <%= f.submit "保存", class: "btn btn-primary" %>
       <%end%><!--form_for-->
     </div>

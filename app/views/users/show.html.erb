@@ -59,7 +59,7 @@
         <th>曜日</th>
         <th>出勤時間</th>
         <th>退勤時間</th>
-        <th>在社時間</th>
+        <th>労働時間</th>
         <th>給料</th>
         <th>備考</th>
         <td>編集</td>
@@ -83,8 +83,35 @@
           <td></td>
           <td></td>
           <td>
-            <%= link_to"編集",pays_edit_path(day),class: "btn btn-primary", remote: true %>
-            <div id="payedit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+            <!--編集モーダル-->
+            <%= fields_for"pays[]", day do |af| %>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">編集</button>
+                <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                      <h1>今日のシフト時間編集</h1>
+                    </div>
+                    <div class="modal-body">
+                      <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
+          
+                        <%= day.worked_on.to_s(:date) %>
+            
+                        <%= f.label :started %>
+                        <%= af.time_field :started %>
+
+                        <%= f.label :finished %>
+                        <%= af.time_field :finished %>
+                    </div>
+                    <div class="modal-footer">
+                        <%= f.submit "保存", class: "btn btn-primary" %>
+                    </div>
+                      <%end%><!--form_for-->
+                  </div>
+                </div>
+              </div>
+            <%end%><!--fields_for-->
+            <!--編集モーダル終了-->
           </td>
         </tr>
       <% end %>
