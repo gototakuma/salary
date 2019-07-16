@@ -1,0 +1,20 @@
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1>シフト時間の変更</h1>
+    </div>
+    <div class="modal-body">
+      <%= form_for(@pay,url: update_pays_path(params: {id: @user.id})) do |f| %>
+        <%= f.label :started %>
+        <%= f.time_field :started %>
+
+        <%= f.label :finished %>
+        <%= f.time_field :finished %>
+
+    </div>
+    <div class="modal-footer">
+        <%= f.submit "保存", class: "btn btn-primary" %>
+      <%end%><!--form_for-->
+    </div>
+  </div>
+</div>

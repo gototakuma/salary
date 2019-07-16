@@ -30,7 +30,7 @@
               <h1>今日のシフト時間入力</h1>
             </div>
             <div class="modal-body">
-              <%= form_for(@user,url: update_pays_new_path(params: {id: @user.id})) do |f| %>
+              <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
           
               <%= day.worked_on.to_s(:date) %>
             
@@ -50,6 +50,7 @@
     <%end%><!--if-->
   <%end%><!--fields_for-->
 <%end%><!--@dates-->
+<!--モーダル終了-->
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
@@ -81,7 +82,10 @@
           </td>
           <td></td>
           <td></td>
-          <td><%= link_to"編集",'#',class: "btn btn-primary" %></td>
+          <td>
+            <%= link_to"編集",pays_edit_path(day),class: "btn btn-primary", remote: true %>
+            <div id="payedit-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+          </td>
         </tr>
       <% end %>
     </tbody>
