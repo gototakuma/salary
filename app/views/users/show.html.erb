@@ -60,6 +60,7 @@
         <th>出勤時間</th>
         <th>退勤時間</th>
         <th>労働時間</th>
+        <th>残業時間</th>
         <th>給料</th>
         <th>備考</th>
         <td>編集</td>
@@ -78,6 +79,11 @@
               <%= working_times(day.started, day.finished) %>
               <% seconds = (day.finished - day.started).to_i %>
               <% @total_seconds = @total_seconds.to_i + seconds %>
+            <%end%>
+          </td>
+          <td>
+            <% if day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i > 8 %>
+              <%= working_times(day.started, day.finished).to_f - 8.0%>
             <%end%>
           </td>
           <td></td>
@@ -118,7 +124,12 @@
     </tbody>
     <tfoot>
       <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>総労働時間</td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
+        <td><%= working_times_sum(@total_seconds).to_i*@user.basic_salary.to_i unless @total_seconds.nil? %>円</td>
       </tr>
     </tfoot>
   </table>

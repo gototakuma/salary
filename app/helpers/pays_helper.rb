@@ -1,6 +1,6 @@
 module PaysHelper
-  def working_times(started_at, finished_at)
-    format("%.2f",(((finished_at - started_at)/ 60) / 60))
+  def working_times(started, finished)
+    format("%.2f",(((finished - started)/ 60) / 60))
   end
   
   def working_times_sum(seconds)

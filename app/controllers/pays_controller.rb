@@ -27,7 +27,7 @@ class PaysController < ApplicationController
   
   def update
     @user = User.find(params[:id])
-    @pay = Pay.find_by(id: params[:id])
+    @pay = Pay.find(params[:id])
     if pay_params.each do |id,item|
       pay = Pay.find(id)
       pay.update_attributes!(item)
