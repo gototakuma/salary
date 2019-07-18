@@ -90,8 +90,10 @@
           <td>
             <% if day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i < 8 %>
               <%= working_times(day.started, day.finished).to_i*@user.basic_salary %>円
+              <% @sumpays =+  @sumpays.to_i + working_times(day.started, day.finished).to_i*@user.basic_salary %>
             <% elsif  day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i > 8 %>
               <%= ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
+            　<% @sumpays_overtime =+ @sumpays_overtime.to_i + ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
             <%end%>
           </td>
           <td></td>
@@ -137,7 +139,7 @@
         <td></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
         <td><%= @secondsov  %></td>
-        <td><%= %>円</td>
+        <td><%= @sumpays + @sumpays_overtime %>円</td>
       </tr>
     </tfoot>
   </table>
