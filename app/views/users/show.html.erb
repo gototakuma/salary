@@ -87,7 +87,13 @@
               <% @secondsov =+ @secondsov.to_f +  working_times_overtime(day.started, day.finished).to_f %>
             <%end%>
           </td>
-          <td></td>
+          <td>
+            <% if day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i < 8 %>
+              <%= working_times(day.started, day.finished).to_i*@user.basic_salary %>円
+            <% elsif  day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i > 8 %>
+              <%= ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
+            <%end%>
+          </td>
           <td></td>
           <td>
             <!--編集モーダル-->
@@ -128,10 +134,10 @@
         <td></td>
         <td></td>
         <td></td>
-        <td>総労働時間</td>
+        <td></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
         <td><%= @secondsov  %></td>
-        <td><%= working_times_sum(@total_seconds).to_i*@user.basic_salary.to_i unless @total_seconds.nil? %>円</td>
+        <td><%= %>円</td>
       </tr>
     </tfoot>
   </table>
