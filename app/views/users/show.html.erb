@@ -37,6 +37,8 @@
 
               <%= f.label :finished %>
               <%= af.time_field :finished %>
+              
+              <%= af.check_box :nextday_box %>
             </div>
           <div class="modal-footer">
               <%= f.submit "保存", class: "btn btn-primary" %>
@@ -88,10 +90,10 @@
           <td>
             <% if day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i < 8 %>
               <%= working_times(day.started, day.finished).to_i*@user.basic_salary %>円
-              <% @sumpays =+  @sumpays.to_i + working_times(day.started, day.finished).to_i*@user.basic_salary %>
+              <% @sumpays =+  @sumpays.to_i  + working_times(day.started, day.finished).to_i*@user.basic_salary %>
             <% elsif  day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i > 8 %>
               <%= ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
-            　<% @sumpays_overtime =+ @sumpays_overtime.to_i + ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
+            　<% @sumpays_overtime =+ @sumpays_overtime.to_i  + ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
             <%end%>
           </td>
           <td></td>
@@ -115,6 +117,8 @@
 
                         <%= f.label :finished %>
                         <%= af.time_field :finished %>
+                        
+                        <%= af.check_box :nextday_box %>
                     </div>
                     <div class="modal-footer">
                         <%= f.submit "保存", class: "btn btn-primary" %>
@@ -136,8 +140,16 @@
         <td></td>
         <td></td>
         <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
-        <td><%= @secondsov  %></td>
-        <td><%= @sumpays + @sumpays_overtime %>円</td>
+        <td><%= @secondsov unless @secondsov.nil?  %></td>
+        <td>
+          <% if @sumpays_overtime.nil? %>
+            <%= @sumpays%>円
+          <% elsif @sumpays.nil? %>
+            <%= @sumpays_overtime %>円
+          <%else%>
+            <%= @sumpays +  @sumpays_overtime %>円
+          <%end%>
+        </td>
       </tr>
     </tfoot>
   </table>

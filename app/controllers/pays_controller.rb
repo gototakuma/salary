@@ -42,6 +42,6 @@ class PaysController < ApplicationController
   private
   
   def pay_params
-    params.permit(pays: [:started,:finished])[:pays]
+    params.permit(pays: [:started,:finished,:nextday_box])[:pays]
   end
 end
