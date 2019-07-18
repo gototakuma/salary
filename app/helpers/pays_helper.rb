@@ -3,9 +3,18 @@ module PaysHelper
     format("%.2f",(((finished - started)/ 60) / 60))
   end
   
+  def working_times_nextday(started, finished)
+    format("%.2f",(((finished - started)/ 60) / 60 ) + 24.0 )
+  end
+  
+  def working_times_nextday_overtime(started, finished)
+    format("%.2f",(((finished - started) / 60) / 60) + 16.0)
+  end
+  
   def working_times_overtime(started, finished)
     format("%.2f",(((finished - started)/ 60) / 60) - 8.0)
   end
+  
   
   def working_times_sum(seconds)
     format("%.2f", seconds / 60 / 60.0)

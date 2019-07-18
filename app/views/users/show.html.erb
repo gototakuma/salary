@@ -16,11 +16,12 @@
   </table>
 </div>
 
-<!--モーダル-->
+<!--クイックモーダル-->
 <% @dates.each do |day| %>
   <%= fields_for"pays[]", day do |af| %>
     <% if day.worked_on == Date.today #&& day.started.nil?%>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">クイック入力</button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">
+      クイック入力</button>
       <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -50,7 +51,7 @@
     <%end%><!--if-->
   <%end%><!--fields_for-->
 <%end%><!--@dates-->
-<!--モーダル終了-->
+<!--クイックモーダル終了-->
 <div>
   <table class="table table-bordered table-condensed table-hover" id="table-attendances">
     <thead>
@@ -75,27 +76,46 @@
           <td><%= day.started.to_s(:hourmin) if day.started.present? %></td>
           <td><%= day.finished.to_s(:hourmin) if day.finished.present? %></td>
           <td>
-            <% if day.started.present? && day.finished.present? %>
+            <!--翌日時間労働時間-->
+            <% if day.started.present? && day.finished.present? && day.nextday_box== true%>
+              <%= working_times_nextday(day.started, day.finished).to_f %>
+              <% @total_seconds =+ @total_seconds.to_f + working_times_nextday(day.started, day.finished).to_f %>
+            <!--当日労働時間-->
+            <% elsif day.started.present? && day.finished.present? %>
               <%= working_times(day.started, day.finished) %>
-              <% seconds = (day.finished - day.started).to_i %>
-              <% @total_seconds = @total_seconds.to_i + seconds %>
+              <% @total_seconds =+ @total_seconds.to_f + working_times(day.started, day.finished).to_f %>
             <%end%>
-          </td>
+          </td><!--労働時間/td-->
           <td>
-            <% if day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i > 8 %>
+            <!--翌日残業時間-->
+            <% if day.started.present? && day.finished.present? && working_times_nextday(day.started, day.finished).to_i > 8 && day.nextday_box== true%>
+              <%= working_times_nextday_overtime(day.started, day.finished).to_f%>
+              <% @secondsov =+ @secondsov.to_f + working_times_nextday_overtime(day.started, day.finished).to_f%>
+            <!--当日残業時間-->
+            <% elsif day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i > 8 %>
               <%= working_times_overtime(day.started, day.finished).to_f%>
               <% @secondsov =+ @secondsov.to_f +  working_times_overtime(day.started, day.finished).to_f %>
             <%end%>
-          </td>
-          <td>
-            <% if day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i < 8 %>
+          </td><!--残業時間/td-->
+          <td><!--給料計算td-->
+            <!--残業あり、翌日-->
+            <% if day.started.present? && day.finished.present? &&  working_times_nextday(day.started, day.finished).to_i > 8 && day.nextday_box== true%>
+              <%= ((8*@user.basic_salary) + (working_times_nextday_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
+            　<% @sumpays_overtime =+ @sumpays_overtime.to_i  + ((8*@user.basic_salary) + (working_times_nextday_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
+            <!--残業なし、翌日-->
+            <% elsif day.started.present? && day.finished.present? &&  working_times_nextday(day.started, day.finished).to_i < 8 &&day.nextday_box== true %>
+              <%= working_times_nextday(day.started, day.finished).to_i*@user.basic_salary %>円
+              <% @sumpays =+  @sumpays.to_i  + working_times_nextday(day.started, day.finished).to_i*@user.basic_salary %>
+            <!--残業なし、その日-->
+            <% elsif day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i < 8 %>
               <%= working_times(day.started, day.finished).to_i*@user.basic_salary %>円
               <% @sumpays =+  @sumpays.to_i  + working_times(day.started, day.finished).to_i*@user.basic_salary %>
+            <!--残業あり、その日-->
             <% elsif  day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i > 8 %>
               <%= ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
             　<% @sumpays_overtime =+ @sumpays_overtime.to_i  + ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
             <%end%>
-          </td>
+          </td><!--給料計算/td-->
           <td></td>
           <td>
             <!--編集モーダル-->
@@ -131,7 +151,7 @@
             <!--編集モーダル終了-->
           </td>
         </tr>
-      <% end %>
+      <% end %><!--@dates-->
     </tbody>
     <tfoot>
       <tr>
@@ -139,17 +159,20 @@
         <td></td>
         <td></td>
         <td></td>
-        <td><%= working_times_sum(@total_seconds) unless @total_seconds.nil? %></td>
+        <td><%= @total_seconds unless @total_seconds.nil? %></td>
         <td><%= @secondsov unless @secondsov.nil?  %></td>
         <td>
+          <!--残業代なし-->
           <% if @sumpays_overtime.nil? %>
             <%= @sumpays%>円
+          <!--残業代ありのみ-->
           <% elsif @sumpays.nil? %>
             <%= @sumpays_overtime %>円
+          <!--残業代なし、あり両方-->
           <%else%>
             <%= @sumpays +  @sumpays_overtime %>円
           <%end%>
-        </td>
+        </td><!--給料合計/td-->
       </tr>
     </tfoot>
   </table>
