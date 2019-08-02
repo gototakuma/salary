@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
+    @salarys = Pay.all
     if params[:first_day].nil?
       @first_day = Date.today.beginning_of_month
     else
@@ -24,6 +25,7 @@ class UsersController < ApplicationController
     end
     @dates = @user.pays.where('worked_on >= ? and worked_on <= ?', @first_day, @last_day).order('worked_on')
     @workdays = @dates.where.not(finished: nil).count
+    @total_salary = @salarys.sum(:salary)
   end
   
   def new

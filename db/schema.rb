@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190718135515) do
+ActiveRecord::Schema.define(version: 20190802085715) do
 
   create_table "pays", force: :cascade do |t|
     t.datetime "started"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20190718135515) do
     t.integer "overtime_pay"
     t.datetime "overtime"
     t.boolean "nextday_box"
+    t.boolean "payalert_box"
     t.index ["user_id"], name: "index_pays_on_user_id"
   end
 
