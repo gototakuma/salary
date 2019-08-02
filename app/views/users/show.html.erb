@@ -20,7 +20,7 @@
 <% @dates.each do |day| %>
   <%= fields_for"pays[]", day do |af| %>
     <% if day.worked_on == Date.today #&& day.started.nil?%>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>">
       クイック入力</button>
       <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
         <div class="modal-dialog" role="document">
@@ -120,7 +120,8 @@
           <td>
             <!--編集モーダル-->
             <%= fields_for"pays[]", day do |af| %>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" data-date="<%= day.worked_on%>">編集</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>">
+              編集</button>
                 <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -170,10 +171,20 @@
             <%= @sumpays_overtime %>円
           <!--残業代なし、あり両方-->
           <%else%>
-            <%= @sumpays +  @sumpays_overtime %>円
+            <%= @sumpays +  @sumpays_overtime %>円<!--カラム年間分のカラム-->
           <%end%>
         </td><!--給料合計/td-->
       </tr>
     </tfoot>
   </table>
 </div>
+
+<% @dates.each do |day| %>
+　<%= day.started.prev_month if day.started.present? %>
+<%end%>
+
+<!--全部の月のレコード拾ってくる。-->
+<!--年間単位ででの計算-->
+<!--month.each ネスト(給料)-->
+<!--whereで今年分の給料を拾ってくる(合計させる)-->
+<!--給料結果をカラムに入れる。新規作成必要あり-->
