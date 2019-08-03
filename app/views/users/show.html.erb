@@ -99,30 +99,20 @@
             <%end%>
           </td><!--残業時間/td-->
           <td><!--給料計算td-->
-            <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
-            <%= fields_for"pays[]", day do |af| %>
             <!--残業あり、翌日-->
             <% if day.started.present? && day.finished.present? &&  working_times_nextday(day.started, day.finished).to_i > 8 && day.nextday_box== true%>
-              <%= af.number_field :salary, value: ((8*@user.basic_salary) + (working_times_nextday_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
-            　<% @sumpays_overtime =+ @sumpays_overtime.to_i  + ((8*@user.basic_salary) + (working_times_nextday_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
+              <%= nextday_overtime_pay(day.started,day.finished,@user.basic_salary).floor%>円
             <!--残業なし、翌日-->
             <% elsif day.started.present? && day.finished.present? &&  working_times_nextday(day.started, day.finished).to_i <= 8 &&day.nextday_box== true %>
-              <%= af.number_field :salary, value: working_times_nextday(day.started, day.finished).to_i*@user.basic_salary %>円
-              <% @sumpays =+  @sumpays.to_i  + working_times_nextday(day.started, day.finished).to_i*@user.basic_salary %>
+              <%= nextday_basic_pay(day.started,day.finished,@user.basic_salary) %>円
             <!--残業なし、その日-->
-            <% elsif day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i <= 8 %>
-              <%= af.number_field :salary, value: working_times(day.started, day.finished).to_i*@user.basic_salary %>円
-              <% @pays = working_times(day.started, day.finished).to_i*@user.basic_salary %>
-              <% @sumpays =+  @sumpays.to_i  + working_times(day.started, day.finished).to_i*@user.basic_salary %>
+            <% elsif day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i <= 8%> 
+              <%=  basic_pay(day.started,day.finished,@user.basic_salary).floor %>円
             <!--残業あり、その日-->
-            <% elsif  day.started.present? && day.finished.present? &&  working_times(day.started, day.finished).to_i > 8 %>
-              <%= af.number_field :salary, value: ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor%>円
-              <% @pays_ovetime =  ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
-            　<% @sumpays_overtime =+ @sumpays_overtime.to_i  + ((8*@user.basic_salary) + (working_times_overtime(day.started, day.finished).to_f*(@user.basic_salary*1.25))).floor %>
+            <% elsif day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i > 8 %>
+              <%= overtime_pay(day.started,day.finished,@user.basic_salary).floor%>円
             <%end%>
-              <%= f.submit "保存", class: "btn btn-primary" if day.started.present?%>
-            <%end%>
-            <%end%>
+             
           </td><!--給料計算/td-->
           <td></td>
           <td>
@@ -170,6 +160,7 @@
             <%end%><!--fields_for-->
           </td>
         </tr>
+        
       <% end %><!--@dates-->
     </tbody>
     <tfoot>
@@ -189,10 +180,10 @@
             <%= @sumpays_overtime %>円
           <!--残業代なし、あり両方-->
           <%else%>
-            <%= @sumpays +  @sumpays_overtime %>円<!--カラム年間分のカラム-->
+            月間<%= @sumpays +  @sumpays_overtime %>円<!--カラム年間分のカラム-->
           <%end%>
         </td><!--給料合計/td-->
-        <td><%= @total_salary %></td>
+        <td>年間<%= @total_salary %></td>
       </tr>
     </tfoot>
   </table>
