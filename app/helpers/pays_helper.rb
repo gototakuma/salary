@@ -23,7 +23,6 @@ module PaysHelper
     format("%.2f", secondsov / 60.0 / 60.0)
   end
   
-  
   def basic_pay(started,finished,basic_salary)
     (((finished - started)/ 60) / 60)*basic_salary
   end

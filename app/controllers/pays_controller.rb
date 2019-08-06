@@ -45,3 +45,6 @@ class PaysController < ApplicationController
     params.permit(pays: [:started,:finished,:nextday_box,:salary])[:pays]
   end
 end
+
+
+# on.click
