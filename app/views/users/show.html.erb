@@ -92,20 +92,17 @@
               <%= working_times_nextday(day.started, day.finished).to_f %>
               <% @total_seconds =+ @total_seconds.to_f + working_times_nextday(day.started, day.finished).to_f %>
             <!--当日労働時間-->
-            <% elsif day.started.present? && day.finished.present? %>
-              <%= working_times(day.started, day.finished) %>
-              <% @total_seconds =+ @total_seconds.to_f + working_times(day.started, day.finished).to_f %>
+            <% elsif day.started_a && day.started_b && day.finished_a && day.finished_b%>
+              <%= working_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
             <%end%>
           </td><!--労働時間/td-->
           <td>
             <!--翌日残業時間-->
             <% if day.started.present? && day.finished.present? && working_times_nextday(day.started, day.finished).to_i > 8 && day.nextday_box== true%>
               <%= working_times_nextday_overtime(day.started, day.finished).to_f%>
-              <% @secondsov =+ @secondsov.to_f + working_times_nextday_overtime(day.started, day.finished).to_f%>
             <!--当日残業時間-->
-            <% elsif day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i > 8 %>
-              <%= working_times_overtime(day.started, day.finished).to_f%>
-              <% @secondsov =+ @secondsov.to_f +  working_times_overtime(day.started, day.finished).to_f %>
+            <% elsif day.started_a && day.started_b && day.finished_a && day.finished_b && working_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b).to_i > 8 %>
+              <%= working_overtimes(day.started_a,day.started_b,day.finished_a,day.finished_b).to_f%>
             <%end%>
           </td><!--残業時間/td-->
           <td><!--給料計算td-->
@@ -205,6 +202,10 @@ $('.sta_<%=day.id%>').change(function() {
  if (Math.sign(finishb - startb) == -1) {
    var hour = (finisha - starta)*<%= @user.basic_salary %> - 1000;
    var min = Math.abs(finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }else if ((finisha - starta) > 8) {
+   var hour = (8*<%= @user.basic_salary %>)+(((finisha - starta) - 8)*(<%= @user.basic_salary %>*1.25))
+   var min = ((finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%>)*1.25 ;
    var result = hour + Math.floor(min);
  }else {
    var hour = (finisha - starta)*<%= @user.basic_salary %>;
