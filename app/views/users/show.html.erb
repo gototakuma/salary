@@ -15,25 +15,6 @@
     </tr>
   </table>
 </div>
-
-<h1>From日付からTo日付までの経過日数を計算する</h1>
- 
-<form id="test2" action="/" method="post" name="range">From日付：
-<input id="fromYear" type="text" name="fromy" size="6" maxlength="4" /> 年 
-<input id="fromMonth" type="text" name="fromm" size="4" maxlength="2" /> 月 
-<input id="fromDate" type="text" name="fromd" size="4" maxlength="2" /> 日
- 
-To日付：
-<input id="toYear" type="text" name="toy" size="6" maxlength="4" /> 年 
-<input id="toMonth" type="text" name="tom" size="4" maxlength="2" /> 月 
-<input id="toDate" type="text" name="tod" size="4" maxlength="2" /> 日
- 
-<input id="calcButton" type="submit" name="regist" value="計算" />
-<input id="resetButton" type="reset" name="reset" value="リセット" />
- 
-</form>
-<p id="returnDate"></p>
-
 <!--クイックモーダル-->
 <% @dates.each do |day| %>
   <%= fields_for"pays[]", day do |af| %>
@@ -96,8 +77,15 @@ To日付：
         <tr>
           <td><%= day.worked_on.to_s(:date) %></td>
           <td><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
-          <td><%= day.started.to_s(:hourmin) if day.started.present? %></td>
-          <td><%= day.finished.to_s(:hourmin) if day.finished.present? %></td>
+          <td>
+            <% if day.started_a.present? && day.started_b.present? %>
+              <%= day.started_a %>:<%= sprintf("%.2d",day.started_b)%></td>
+            <%end%>
+          <td>
+            <% if day.finished_a.present? && day.finished_b.present? %>
+              <%= day.finished_a%>:<%= sprintf("%.2d",day.finished_b) %>
+            <%end%>
+          </td>
           <td>
             <!--翌日時間労働時間-->
             <% if day.started.present? && day.finished.present? && day.nextday_box== true%>
