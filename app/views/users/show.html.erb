@@ -147,13 +147,13 @@
                         <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
 
                         <%= f.label :salary %>
-                        <%= af.text_field :salary , class: "sa"%>
+                        <%= af.text_field :salary , class: "sa_#{day.id}"%>
                         <p></p>
                         <p2></p2>
                         <p3></p3>
                         
                         
-                        <%= af.check_box :nextday_box %>
+                        <%= af.check_box :nextday_box, class: "ch_#{day.id}" %>
                     </div>
                     <div class="modal-footer">
                         <%= f.submit "保存", class: "btn btn-primary" %>
@@ -189,7 +189,7 @@
 
 <% @dates.each do |day| %>
 <script>
-$('.sta_<%=day.id%>').change(function() {
+$('.sta_<%=day.id%>, .stb_<%=day.id%>, .fib_<%=day.id%> , .fia_<%=day.id%>, ch_<%day.id%>').change(function() {
  var sta = $('.sta_<%=day.id%>').val();
  var stb = $('.stb_<%=day.id%>').val();
  var starta = parseInt(sta);
@@ -207,12 +207,17 @@ $('.sta_<%=day.id%>').change(function() {
    var hour = (8*<%= @user.basic_salary %>)+(((finisha - starta) - 8)*(<%= @user.basic_salary %>*1.25))
    var min = ((finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%>)*1.25 ;
    var result = hour + Math.floor(min);
- }else {
+ }else if ($('.ch_<%=day.id%>').prop('checked') == true) {
+   var hour = ((finisha + 24) - starta)*<%= @user.basic_salary %>;
+   var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }
+ else {
    var hour = (finisha - starta)*<%= @user.basic_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
    }
-$('.sa').val(result);
+$('.sa_<%=day.id %>').val(result);
 });
 </script>
 <%end%>
