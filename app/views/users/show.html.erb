@@ -51,14 +51,16 @@ To日付：
           
               <%= day.worked_on.to_s(:date) %>
             
-              <%= f.label :started %>
-              <%= af.time_field :started %>
+              <%= f.label :started%>
+              <%= af.text_field :started_a, class: "sta_#{day.id}"%>:
+              <%= af.text_field :started_b, class: "stb_#{day.id}"%><br>
 
               <%= f.label :finished %>
-              <%= af.time_field :finished %>
-              
-              <%= af.text_field :salary , class: "sa"%>
-              
+              <%= af.text_field :finished_a, class: "fia_#{day.id}" %>:
+              <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
+
+              <%= f.label :salary %>
+              <%= af.text_field :salary , class: "sa"%>円
               
               <%= af.check_box :nextday_box %>
             </div>
@@ -134,7 +136,7 @@ To日付：
             <%end%>
              
           </td><!--給料計算/td-->
-          <td></td>
+          <td><%= day.salary if day.salary.present?%>円</td>
           <td>
             <!--編集モーダル-->
             <%= fields_for"pays[]", day do |af| %>
@@ -151,13 +153,15 @@ To日付：
           
                         <%= day.worked_on.to_s(:date) %>
                         
-                          <%= f.label :started%>
-                          <%= af.time_field :started, class: "st"%>
+                        <%= f.label :started%>
+                        <%= af.text_field :started_a, class: "sta_#{day.id}"%>:
+                        <%= af.text_field :started_b, class: "stb_#{day.id}"%><br>
 
                         <%= f.label :finished %>
-                        <%= af.time_field :finished, class: "fi" %>
+                        <%= af.text_field :finished_a, class: "fia_#{day.id}" %>:
+                        <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
 
-                        
+                        <%= f.label :salary %>
                         <%= af.text_field :salary , class: "sa"%>
                         <p></p>
                         <p2></p2>
@@ -198,64 +202,31 @@ To日付：
 </div>
 
 
-
+<% @dates.each do |day| %>
 <script>
-$(function(){
-  $(".st").change(function() {
-   var one_sec = 1000 // 1秒
-    , one_min = one_sec * 60 // 1分
-    , one_hour = one_min * 60 // 1時間
-    , var dt = new Date()
-    , datetime_a = '2000-01-01 08:45:50'
-    , datetime_b = '2000-01-01 16:33:30';
-    datetime_a = datetime_a.replace(/-/g, '/');
-    datetime_b = datetime_b.replace(/-/g, '/');
+$('.sta_<%=day.id%>').change(function() {
+ var sta = $('.sta_<%=day.id%>').val();
+ var stb = $('.stb_<%=day.id%>').val();
+ var starta = parseInt(sta);
+ var startb = parseInt(stb);
  
-    var diff = Date.parse(datetime_b) - Date.parse(datetime_a)
-    , diff_h = Math.floor(diff / one_hour) // 時間
-    , diff_m = Math.floor(diff % one_hour / one_min) // 分
-    , diff_s = Math.floor(diff % one_min / one_sec); // 秒
-    var ans = (diff_h + '時間' + diff_m + '分' + diff_s + '秒');
-   $(".sa").val(ans);
-  });
-});
-
-
-$(function() {
- $('#toDate').change(function(e) {
- e.preventDefault(); // hrefが無効になり、画面遷移が行わない
- var fromy = $('#fromYear').val();
- var fromm = $('#fromMonth').val();
- var fromd = $('#fromDate').val();
- if (fromy !== "" && fromm !== "" && fromd !== "") {
- var from = Date.parse(fromy+"/"+fromm+"/"+fromd); // From日付
- }
- 
- var toy = $('#toYear').val();
- var tom = $('#toMonth').val();
- var tod = $('#toDate').val();
- if (toy !== "" && tom !== "" && tod !== "") {
- var to = Date.parse(toy+"/"+tom+"/"+tod); // To日付
- }
- 
- if (from !== '' && to !== '') {
- var ans = (to - from)/1000/60/60/24; // 日数計算（単位がミリ秒���ので日単位に変換）
- returnDate = Math.floor(ans); // 小数点以下を切り捨て
- 
- if (isNaN(returnDate) || returnDate == 0) { // NaN(Not a Number)を出さないように
- var returnDate = 0;
- } else {
- $('#returnDate').text(returnDate+"日経過");
- }
- } 
- });
- 
- // リセット
- $('#resetButton').click(function(){
- $('#returnDate').text("");
- });
+ var fia = $('.fia_<%=day.id%>').val();
+ var fib = $('.fib_<%=day.id%>').val();
+ var finisha = parseInt(fia);
+ var finishb = parseInt(fib);
+ if (Math.sign(finishb - startb) == -1) {
+   var hour = (finisha - starta)*<%= @user.basic_salary %> - 1000;
+   var min = Math.abs(finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }else {
+   var hour = (finisha - starta)*<%= @user.basic_salary %>;
+   var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+   }
+$('.sa').val(result);
 });
 </script>
+<%end%>
 
 
 <!--全部の月のレコード拾ってくる。-->
