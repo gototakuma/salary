@@ -11,7 +11,7 @@
       <td>名前：<%= @user.name %></td>
       <td>基本給:<%= @user.basic_salary %>円</td>
       <td>出勤日数：<%= @workdays %></td>
-      <td>扶養額:<%= @user.recharge %>万 </td>
+      <td>扶養額:<%= @user.recharge %>円</td>
     </tr>
   </table>
 </div>
@@ -41,9 +41,9 @@
               <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
 
               <%= f.label :salary %>
-              <%= af.text_field :salary , class: "sa"%>円
+              <%= af.text_field :salary ,readonly: true ,class: "sa_#{day.id}"%>円
               
-              <%= af.check_box :nextday_box %>
+              <%= af.check_box :nextday_box,class: "ch_#{day.id}" %>
             </div>
           <div class="modal-footer">
               <%= f.submit "保存", class: "btn btn-primary" %>
@@ -88,9 +88,8 @@
           </td>
           <td>
             <!--翌日時間労働時間-->
-            <% if day.started.present? && day.finished.present? && day.nextday_box== true%>
-              <%= working_times_nextday(day.started, day.finished).to_f %>
-              <% @total_seconds =+ @total_seconds.to_f + working_times_nextday(day.started, day.finished).to_f %>
+            <% if day.started_a && day.started_b && day.finished_a && day.finished_b && day.nextday_box== true%>
+              <%= working_nextday_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
             <!--当日労働時間-->
             <% elsif day.started_a && day.started_b && day.finished_a && day.finished_b%>
               <%= working_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
@@ -98,30 +97,19 @@
           </td><!--労働時間/td-->
           <td>
             <!--翌日残業時間-->
-            <% if day.started.present? && day.finished.present? && working_times_nextday(day.started, day.finished).to_i > 8 && day.nextday_box== true%>
-              <%= working_times_nextday_overtime(day.started, day.finished).to_f%>
+            <% if day.started_a && day.started_b && day.finished_a && day.finished_b && working_nextday_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b).to_i > 8 && day.nextday_box == true %>
+              <%= working_nextday_overtimes_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
             <!--当日残業時間-->
             <% elsif day.started_a && day.started_b && day.finished_a && day.finished_b && working_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b).to_i > 8 %>
               <%= working_overtimes(day.started_a,day.started_b,day.finished_a,day.finished_b).to_f%>
             <%end%>
           </td><!--残業時間/td-->
           <td><!--給料計算td-->
-            <!--残業あり、翌日-->
-            <% if day.started.present? && day.finished.present? &&  working_times_nextday(day.started, day.finished).to_i > 8 && day.nextday_box== true%>
-              <%= nextday_overtime_pay(day.started,day.finished,@user.basic_salary).floor%>円
-            <!--残業なし、翌日-->
-            <% elsif day.started.present? && day.finished.present? &&  working_times_nextday(day.started, day.finished).to_i <= 8 &&day.nextday_box== true %>
-              <%= nextday_basic_pay(day.started,day.finished,@user.basic_salary) %>円
-            <!--残業なし、その日-->
-            <% elsif day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i <= 8%> 
-              <%=  basic_pay(day.started,day.finished,@user.basic_salary).floor %>円
-            <!--残業あり、その日-->
-            <% elsif day.started.present? && day.finished.present? && working_times(day.started, day.finished).to_i > 8 %>
-              <%= overtime_pay(day.started,day.finished,@user.basic_salary).floor%>円
+            <% if day.salary.present? %>
+              <%= day.salary %>円
             <%end%>
-             
           </td><!--給料計算/td-->
-          <td><%= day.salary if day.salary.present?%>円</td>
+          <td></td>
           <td>
             <!--編集モーダル-->
             <%= fields_for"pays[]", day do |af| %>
@@ -147,11 +135,7 @@
                         <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
 
                         <%= f.label :salary %>
-                        <%= af.text_field :salary , class: "sa_#{day.id}"%>
-                        <p></p>
-                        <p2></p2>
-                        <p3></p3>
-                        
+                        <%= af.text_field :salary , readonly: true ,class: "sa_#{day.id}"%>
                         
                         <%= af.check_box :nextday_box, class: "ch_#{day.id}" %>
                     </div>
@@ -179,8 +163,9 @@
         <td></td>
         <td><%= @total_seconds unless @total_seconds.nil? %></td>
         <td><%= @secondsov unless @secondsov.nil?  %></td>
-        <td></td><!--給料合計/td-->
-        <td>年間<%= @total_salary %></td>
+        <td>月間<%= @total_month%>円</td><!--給料合計/td-->
+        <td>年間<%= @total_salary %>円</td>
+        <td>差額<%= rechargesub(@user.recharge,@salarys.sum(:salary)) %></td>
       </tr>
     </tfoot>
   </table>

@@ -24,8 +24,10 @@ class UsersController < ApplicationController
       end
     end
     @dates = @user.pays.where('worked_on >= ? and worked_on <= ?', @first_day, @last_day).order('worked_on')
-    @workdays = @dates.where.not(finished: nil).count
+    @workdays = @dates.where.not(finished_a: nil).count
+    @total_month_salary = @dates.sum(:salary)
     @total_salary = @salarys.sum(:salary)
+    
   end
   
   def new

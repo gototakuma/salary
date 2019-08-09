@@ -43,15 +43,19 @@ module PaysHelper
     format("%.2f",(finished_a - started_a)+((finished_b - started_b) / 60.0))
   end
   
+  def working_nextday_times_a(started_a,started_b,finished_a,finished_b)
+    format("%.2f",((finished_a+24) - started_a)+((finished_b - started_b) / 60.0))
+  end
+  
+  def working_nextday_overtimes_a(started_a,started_b,finished_a,finished_b)
+    format("%.2f",((finished_a+16) - started_a)+((finished_b - started_b) / 60.0))
+  end
+  
   def working_overtimes(started_a,started_b,finished_a,finished_b)
     format("%.2f",(finished_a - started_a)+((finished_b - started_b) / 60.0) - 8.0)
   end
-  # if (Math.sign(finishb - startb) == -1) {
-  # var hour = (finisha - starta)*<%= @user.basic_salary %> - 1000;
-  # var min = Math.abs(finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
-  # var result = hour + Math.floor(min);
-   
-  # var hour = (finisha - starta)*<%= @user.basic_salary %>;
-  # var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
-  # var result = hour + Math.floor(min);
+  
+  def rechargesub(recharge,salary)
+    recharge - salary
+  end
 end
