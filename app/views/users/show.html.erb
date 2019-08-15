@@ -12,6 +12,7 @@
       <td>基本給:<%= @user.basic_salary %>円</td>
       <td>出勤日数：<%= @workdays %></td>
       <td>扶養額:<%= @user.recharge %>円</td>
+      <td>勤務地: <%= @user.job %></td>
     </tr>
   </table>
 </div>
@@ -68,7 +69,7 @@
         <th>残業時間</th>
         <th>給料</th>
         <th>備考</th>
-        <td>編集</td>
+        <th>編集</th>
       </tr>
     </thead>
 
@@ -147,10 +148,7 @@
                 </div>
               </div>
             <!--編集モーダル終了-->
-          </td>
-          <td>
             <%end%><!--fields_for-->
-          </td>
         </tr>
         
       <% end %><!--@dates-->
@@ -163,7 +161,7 @@
         <td></td>
         <td><%= @total_seconds unless @total_seconds.nil? %></td>
         <td><%= @secondsov unless @secondsov.nil?  %></td>
-        <td>月間<%= @total_month%>円</td><!--給料合計/td-->
+        <td>月間<%= @total_month_salary%>円</td><!--給料合計/td-->
         <td>年間<%= @total_salary %>円</td>
         <td>差額<%= rechargesub(@user.recharge,@salarys.sum(:salary)) %></td>
       </tr>
@@ -206,10 +204,3 @@ $('.sa_<%=day.id %>').val(result);
 });
 </script>
 <%end%>
-
-
-<!--全部の月のレコード拾ってくる。-->
-<!--年間単位ででの計算-->
-<!--month.each ネスト(給料)-->
-<!--whereで今年分の給料を拾ってくる(合計させる)-->
-<!--給料結果をカラムに入れる。新規作成必要あり-->

@@ -1,22 +1,25 @@
 <%= form_with(model: @user, local: true) do |f| %>
   <%= render 'shared/error_messages', object: @user %>
 
-  <%= f.label :name, class: "label-#{yield(:class_text)}" %>
+  <%= f.label :name%>
   <%= f.text_field :name, class: "form-control" %>
 
-  <%= f.label :email, class: "label-#{yield(:class_text)}" %>
+  <%= f.label :email %>
   <%= f.email_field :email, class: "form-control" %>
   
-  <%= f.label :basic_salary, class: "label-#{yield(:class_text)}" %>
+  <%= f.label :basic_salary %>
   <%= f.text_field :basic_salary, class: "form-control"%>
   
-  <%= f.label :recharge, class: "label-#{yield(:class_text)}" %>
+  <%= f.label :job %>
+  <%= f.text_field :job, class: "form-control"%>
+  
+  <%= f.label :recharge %>
   <%= f.text_field :recharge, class: "form-control" %>
 
-  <%= f.label :password, class: "label-#{yield(:class_text)}" %>
+  <%= f.label :password %>
   <%= f.password_field :password, class: "form-control" %>
 
-  <%= f.label :password_confirmation, "Confirmation", class: "label-#{yield(:class_text)}" %>
+  <%= f.label :password_confirmation, "Confirmation"%>
   <%= f.password_field :password_confirmation, class: "form-control" %>
 
   <%= f.submit yield(:button_text), class: "btn btn-primary btn-block btn-#{yield(:class_text)}" %>

@@ -13,8 +13,8 @@
 ActiveRecord::Schema.define(version: 20190806064253) do
 
   create_table "pays", force: :cascade do |t|
-    t.datetime "started"
-    t.datetime "finished"
+    t.integer "started"
+    t.integer "finished"
     t.date "worked_on"
     t.integer "user_id"
     t.datetime "created_at", null: false
