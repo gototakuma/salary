@@ -1,0 +1,26 @@
+ja:
+  activerecord:
+    models:
+      user: ユーザー
+      pay: 給料
+    attributes:
+        user:
+          name: 名前
+          email: メールアドレス
+          password: パスワード
+          job: 勤務先
+          admin: 管理者
+          basic_salary: 基本給
+          recharge: 扶養額
+          password_confirmation: パスワード(確認)
+        pay:
+          started: 開始時間
+          started_a: 開始時間(時)
+          started_b: 開始時間(分)
+          finished: 終了時間
+          finished_a: 終了時間(時)
+          finished_b: 終了時間(分)
+          worked_on: 日付
+          salary: 給料
+          overtime: 残業時間
+          overtime_pay: 残業代

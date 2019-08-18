@@ -13,6 +13,7 @@ gem 'bootstrap-sass'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate' 
+gem 'rails-i18n', '~> 5.1'
 
 group :development, :test do
   gem 'sqlite3', group: :development
