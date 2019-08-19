@@ -1,20 +1,6 @@
-<div>
-  <table class="table table-bordered table-condensed user-table">
-    <tr>
-      <td>
-        <%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),
-                         class: "btn btn-xs btn-primary" %>
-        &emsp;<%= @first_day.to_s(:year_month) %>&emsp;
-        <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),
-                         class: "btn btn-xs btn-primary" %>
-      </td>
-      <td>名前：<%= @user.name %></td>
-      <td>基本給:<%= @user.basic_salary %>円</td>
-      <td>出勤日数：<%= @workdays %></td>
-      <td>扶養額:<%= @user.recharge %>円</td>
-    </tr>
-  </table>
-</div>
+<%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),class: "btn btn-xs btn-primary" %>
+  &emsp;<%= @first_day.to_s(:year_month) %>&emsp;
+<%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),class: "btn btn-xs btn-primary" %>
 <!--クイックモーダル-->
 <% @dates.each do |day| %>
   <%= fields_for"pays[]", day do |af| %>
@@ -32,15 +18,17 @@
           
               <%= day.worked_on.to_s(:date) %>
             
-              <%= f.label :started%>
+              <%= f.label :started, "開始時間"%>
               <%= af.text_field :started_a, class: "sta_#{day.id}"%>:
               <%= af.text_field :started_b, class: "stb_#{day.id}"%><br>
 
-              <%= f.label :finished %>
+              <%= f.label :finished, "終了時間" %>
               <%= af.text_field :finished_a, class: "fia_#{day.id}" %>:
               <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
+              
+              <%= af.text_field :paynote, class: "form-control" %>
 
-              <%= f.label :salary %>
+              <%= f.label :salary, "給料" %>
               <%= af.text_field :salary ,readonly: true ,class: "sa_#{day.id}"%>円
               
               <%= af.check_box :nextday_box,class: "ch_#{day.id}" %>
@@ -57,7 +45,7 @@
 <%end%><!--@dates-->
 <!--クイックモーダル終了-->
 <div>
-  <table class="table table-bordered table-condensed table-hover" id="table-attendances">
+  <table class="table table-bordered table-condensed table-hover">
     <thead>
       <tr>
         <th>日付</th>
@@ -68,25 +56,35 @@
         <th>残業時間</th>
         <th>給料</th>
         <th>備考</th>
-        <td>編集</td>
+        <th>編集</th>
       </tr>
     </thead>
 
     <tbody>
       <% @dates.each do |day| %>
         <tr>
-          <td><%= day.worked_on.to_s(:date) %></td>
-          <td><%= %w{日 月 火 水 木 金 土}[day.worked_on.wday] %></td>
-          <td>
+          <td id="table-center"><%= day.worked_on.to_s(:date) %></td>
+          <td id="table-center">
+            <% week_name = %w[日 月 火 水 木 金 土] %>
+             <% str = week_name[day.worked_on.wday] %>
+            <% if day.worked_on.wday == 0 %>
+              <font color="red"><%=week_name[day.worked_on.wday]%></font>
+            <% elsif day.worked_on.wday == 6 %>
+              <font color="blue"><%=week_name[day.worked_on.wday]%></font>
+            <%else%>
+              <%= str%>
+            <%end%>
+          </td>
+          <td id="table-center">
             <% if day.started_a.present? && day.started_b.present? %>
               <%= day.started_a %>:<%= sprintf("%.2d",day.started_b)%></td>
             <%end%>
-          <td>
+          <td id="table-center">
             <% if day.finished_a.present? && day.finished_b.present? %>
               <%= day.finished_a%>:<%= sprintf("%.2d",day.finished_b) %>
             <%end%>
           </td>
-          <td>
+          <td id="table-center">
             <!--翌日時間労働時間-->
             <% if day.started_a && day.started_b && day.finished_a && day.finished_b && day.nextday_box== true%>
               <%= working_nextday_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
@@ -95,7 +93,7 @@
               <%= working_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
             <%end%>
           </td><!--労働時間/td-->
-          <td>
+          <td id="table-center">
             <!--翌日残業時間-->
             <% if day.started_a && day.started_b && day.finished_a && day.finished_b && working_nextday_times_a(day.started_a,day.started_b,day.finished_a,day.finished_b).to_i > 8 && day.nextday_box == true %>
               <%= working_nextday_overtimes_a(day.started_a,day.started_b,day.finished_a,day.finished_b) %>
@@ -104,13 +102,13 @@
               <%= working_overtimes(day.started_a,day.started_b,day.finished_a,day.finished_b).to_f%>
             <%end%>
           </td><!--残業時間/td-->
-          <td><!--給料計算td-->
+          <td id="table-center"><!--給料計算td-->
             <% if day.salary.present? %>
               <%= day.salary %>円
             <%end%>
           </td><!--給料計算/td-->
-          <td></td>
-          <td>
+          <td id="table-center"><%= day.paynote%></td>
+          <td width="7%" id="table-center">
             <!--編集モーダル-->
             <%= fields_for"pays[]", day do |af| %>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>">
@@ -126,15 +124,17 @@
           
                         <%= day.worked_on.to_s(:date) %>
                         
-                        <%= f.label :started%>
+                        <%= f.label :started, "開始時間"%>
                         <%= af.text_field :started_a, class: "sta_#{day.id}"%>:
                         <%= af.text_field :started_b, class: "stb_#{day.id}"%><br>
 
-                        <%= f.label :finished %>
+                        <%= f.label :finished, "終了時間" %>
                         <%= af.text_field :finished_a, class: "fia_#{day.id}" %>:
                         <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
+                        
+                        <%= af.text_field :paynote, class: "form-control" %>
 
-                        <%= f.label :salary %>
+                        <%= f.label :salary, "給料" %>
                         <%= af.text_field :salary , readonly: true ,class: "sa_#{day.id}"%>
                         
                         <%= af.check_box :nextday_box, class: "ch_#{day.id}" %>
@@ -148,9 +148,7 @@
               </div>
             <!--編集モーダル終了-->
           </td>
-          <td>
             <%end%><!--fields_for-->
-          </td>
         </tr>
         
       <% end %><!--@dates-->
