@@ -1,3 +1,4 @@
+<div class="yearbutton">
 <%= link_to "←", user_path(params: {id: @user.id, first_day: @first_day.prev_month }),class: "btn btn-xs btn-primary" %>
   &emsp;<%= @first_day.to_s(:year_month) %>&emsp;
 <%= link_to "→", user_path(params: {id: @user.id, first_day: @first_day.next_month }),class: "btn btn-xs btn-primary" %>
@@ -5,7 +6,7 @@
 <% @dates.each do |day| %>
   <%= fields_for"pays[]", day do |af| %>
     <% if day.worked_on == Date.today #&& day.started.nil?%>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>" id="btright">
       クイック入力</button>
       <div class="modal fade" id="modal-<%=day.id%>" tabindex="-1" role="dialog" aria-hidden="true" >
         <div class="modal-dialog" role="document">
@@ -44,10 +45,11 @@
   <%end%><!--fields_for-->
 <%end%><!--@dates-->
 <!--クイックモーダル終了-->
+</div>
 <div>
   <table class="table table-bordered table-condensed table-hover">
     <thead>
-      <tr>
+      <tr class="success">
         <th>日付</th>
         <th>曜日</th>
         <th>出勤時間</th>
@@ -63,7 +65,7 @@
     <tbody>
       <% @dates.each do |day| %>
         <tr>
-          <td id="table-center"><%= day.worked_on.to_s(:date) %></td>
+          <td id="table-center" class="active"><%= day.worked_on.to_s(:date) %></td>
           <td id="table-center">
             <% week_name = %w[日 月 火 水 木 金 土] %>
              <% str = week_name[day.worked_on.wday] %>
@@ -150,24 +152,21 @@
           </td>
             <%end%><!--fields_for-->
         </tr>
-        
       <% end %><!--@dates-->
     </tbody>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><%= @total_seconds unless @total_seconds.nil? %></td>
-        <td><%= @secondsov unless @secondsov.nil?  %></td>
-        <td>月間<%= @total_month%>円</td><!--給料合計/td-->
-        <td>年間<%= @total_salary %>円</td>
-        <td>差額<%= rechargesub(@user.recharge,@salarys.sum(:salary)) %></td>
-      </tr>
-    </tfoot>
   </table>
 </div>
+
+<table class="table table-hover" >
+  <tr class="info" id="table-center">
+    <td>今月: &emsp; <%= @total_month_salary%>円</td>
+    <td>年間: &emsp; <%= @total_salary %>円</td>
+    <td>扶養額:  &emsp; <%= @user.recharge %>円</td>
+    <td>扶養額まで残り: &emsp; <%= rechargesub(@user.recharge,@salarys.sum(:salary)) %>円</td>
+  </tr>
+</table>
+
+
 
 
 <% @dates.each do |day| %>
