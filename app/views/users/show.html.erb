@@ -177,12 +177,23 @@
        <td>今月: &emsp; <%= @total_month_salary%>円</td>
        <td>年間: &emsp; <%= @total_salary %>円</td>
        <td>扶養額:  &emsp; <%= @user.recharge %>円</td>
-       <td>扶養額まで残り: &emsp; <%= rechargesub(@user.recharge,@salarys.sum(:salary)) %>円</td>
+       <td>
+         扶養額まで残り: 
+         <% if @first_day.to_s(:year) == Date.today.year.to_s%>
+           &emsp; <%= rechargesub(@user.recharge,@salarys.sum(:salary)) %>円
+         <%else%>
+           &emsp; <%= @user.recharge %>円
+         <%end%>
+        </td>
      </tr>
    </table>
   </div>
 </nav>
 
+<%=  Date.today.year %>
+<%= Date.today.beginning_of_year%>
+<%= @first_day %>
+<%= @first_day.to_s(:year)%>
 
 
 
