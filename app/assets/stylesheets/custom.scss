@@ -80,3 +80,28 @@ table th{
     float: right;
   }
 }
+
+.time-field {
+  width: 8%;
+  display: inline-block;
+}
+
+.salary-field {
+  display: inline-block;
+  width: 80%;
+}
+
+.modal-size {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.modal-size-salary {
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.white {
+ color: white;
+}

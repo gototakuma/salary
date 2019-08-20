@@ -17,23 +17,30 @@
             <div class="modal-body">
               <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
           
-              <%= day.worked_on.to_s(:date) %>
+              <div class="modal-size">日付 <%= day.worked_on.to_s(:date) %></div>
             
               <%= f.label :started, "開始時間"%>
-              <%= af.text_field :started_a, class: "sta_#{day.id}"%>:
-              <%= af.text_field :started_b, class: "stb_#{day.id}"%><br>
+              <%= af.text_field :started_a, class: "sta_#{day.id} form-control time-field"%>:
+              <%= af.text_field :started_b, class: "stb_#{day.id} form-control time-field"%>
 
               <%= f.label :finished, "終了時間" %>
-              <%= af.text_field :finished_a, class: "fia_#{day.id}" %>:
-              <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
+              <%= af.text_field :finished_a, class: "fia_#{day.id} form-control time-field" %>:
+              <%= af.text_field :finished_b, class: "fib_#{day.id} form-control time-field" %>
+              <br>
               
-              <%= af.text_field :paynote, class: "form-control" %>
-
-              <%= f.label :salary, "給料" %>
-              <%= af.text_field :salary ,readonly: true ,class: "sa_#{day.id}"%>円
-              
+              <%= f.label :nextday_box, "日付をまたく場合はチェック" %>
               <%= af.check_box :nextday_box,class: "ch_#{day.id}" %>
-            </div>
+              <br>
+
+              <%= f.label :salary, "給料" %><br>
+              <%= af.text_field :salary ,readonly: true ,class: "sa_#{day.id} form-control salary-field"%><div class="modal-size-salary">円</div>
+              <br>
+              
+              <%= f.label :paynote, "備考欄" %>
+              <%= af.text_field :paynote, class: "form-control " %>
+              
+              
+          </div>
           <div class="modal-footer">
               <%= f.submit "保存", class: "btn btn-primary" %>
           </div>
@@ -110,7 +117,7 @@
             <%end%>
           </td><!--給料計算/td-->
           <td id="table-center"><%= day.paynote%></td>
-          <td width="7%" id="table-center">
+          <td width="6%" >
             <!--編集モーダル-->
             <%= fields_for"pays[]", day do |af| %>
               <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-<%=day.id%>">
@@ -124,22 +131,27 @@
                     <div class="modal-body">
                       <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
           
-                        <%= day.worked_on.to_s(:date) %>
-                        
+                        <div class="modal-size">日付 <%= day.worked_on.to_s(:date) %></div>
+            
                         <%= f.label :started, "開始時間"%>
-                        <%= af.text_field :started_a, class: "sta_#{day.id}"%>:
-                        <%= af.text_field :started_b, class: "stb_#{day.id}"%><br>
+                        <%= af.text_field :started_a, class: "sta_#{day.id} form-control time-field"%>:
+                        <%= af.text_field :started_b, class: "stb_#{day.id} form-control time-field"%>
 
                         <%= f.label :finished, "終了時間" %>
-                        <%= af.text_field :finished_a, class: "fia_#{day.id}" %>:
-                        <%= af.text_field :finished_b, class: "fib_#{day.id}" %><br>
-                        
-                        <%= af.text_field :paynote, class: "form-control" %>
+                        <%= af.text_field :finished_a, class: "fia_#{day.id} form-control time-field" %>:
+                        <%= af.text_field :finished_b, class: "fib_#{day.id} form-control time-field" %>
+                        <br>
+              
+                        <%= f.label :nextday_box, "日付をまたく場合はチェック" %>
+                        <%= af.check_box :nextday_box,class: "ch_#{day.id}" %>
+                        <br>
 
-                        <%= f.label :salary, "給料" %>
-                        <%= af.text_field :salary , readonly: true ,class: "sa_#{day.id}"%>
-                        
-                        <%= af.check_box :nextday_box, class: "ch_#{day.id}" %>
+                        <%= f.label :salary, "給料" %><br>
+                        <%= af.text_field :salary ,readonly: true ,class: "sa_#{day.id} form-control salary-field"%><div class="modal-size-salary">円</div>
+                        <br>
+              
+                        <%= f.label :paynote, "備考欄" %>
+                        <%= af.text_field :paynote, class: "form-control " %>
                     </div>
                     <div class="modal-footer">
                         <%= f.submit "保存", class: "btn btn-primary" %>
@@ -157,14 +169,19 @@
   </table>
 </div>
 
-<table class="table table-hover" >
-  <tr class="info" id="table-center">
-    <td>今月: &emsp; <%= @total_month_salary%>円</td>
-    <td>年間: &emsp; <%= @total_salary %>円</td>
-    <td>扶養額:  &emsp; <%= @user.recharge %>円</td>
-    <td>扶養額まで残り: &emsp; <%= rechargesub(@user.recharge,@salarys.sum(:salary)) %>円</td>
-  </tr>
-</table>
+<div class="white"><p>総計</p></div>
+<nav class="navbar  navbar-fixed-bottom" role="navigation" id="paddingtop">
+  <div class="container" >
+   <table class="table table-hover"  >
+     <tr class="info" id="table-center">
+       <td>今月: &emsp; <%= @total_month_salary%>円</td>
+       <td>年間: &emsp; <%= @total_salary %>円</td>
+       <td>扶養額:  &emsp; <%= @user.recharge %>円</td>
+       <td>扶養額まで残り: &emsp; <%= rechargesub(@user.recharge,@salarys.sum(:salary)) %>円</td>
+     </tr>
+   </table>
+  </div>
+</nav>
 
 
 
