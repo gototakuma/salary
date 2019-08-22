@@ -24,12 +24,12 @@
               <div class="modal-size">日付 <%= day.worked_on.to_s(:date) %></div>
             
               <%= f.label :started, "開始時間"%>
-              <%= af.text_field :started_a, class: "sta_#{day.id} form-control time-field"%>:
-              <%= af.text_field :started_b, class: "stb_#{day.id} form-control time-field"%>
+              <%= af.number_field :started_a, class: "sta_#{day.id} form-control time-field",max: 23, min: 0%>:
+              <%= af.number_field :started_b,class: "stb_#{day.id} form-control time-field",max: 59, min: 0%>
 
               <%= f.label :finished, "終了時間" %>
-              <%= af.text_field :finished_a, class: "fia_#{day.id} form-control time-field" %>:
-              <%= af.text_field :finished_b, class: "fib_#{day.id} form-control time-field" %>
+              <%= af.number_field :finished_a,class: "fia_#{day.id} form-control time-field" ,max: 23, min: 0%>:
+              <%= af.number_field :finished_b, class: "fib_#{day.id} form-control time-field" ,max: 59, min: 0%>
               <br>
               
               <%= f.label :nextday_box, "日付をまたく場合はチェック" %>
@@ -41,7 +41,7 @@
               <br>
               
               <%= f.label :paynote, "備考欄" %>
-              <%= af.text_field :paynote, class: "form-control " %>
+              <%= af.text_field :paynote, class: "form-control ",maxlength: 30 %>
               
               
           </div>
@@ -138,12 +138,12 @@
                         <div class="modal-size">日付 <%= day.worked_on.to_s(:date) %></div>
             
                         <%= f.label :started, "開始時間"%>
-                        <%= af.text_field :started_a, class: "sta_#{day.id} form-control time-field"%>:
-                        <%= af.text_field :started_b, class: "stb_#{day.id} form-control time-field"%>
+                        <%= af.text_field :started_a, class: "sta_#{day.id} form-control time-field",max: 23, min: 0%>:
+                        <%= af.text_field :started_b, class: "stb_#{day.id} form-control time-field",max: 59, min: 0%>
 
                         <%= f.label :finished, "終了時間" %>
-                        <%= af.text_field :finished_a, class: "fia_#{day.id} form-control time-field" %>:
-                        <%= af.text_field :finished_b, class: "fib_#{day.id} form-control time-field" %>
+                        <%= af.text_field :finished_a, class: "fia_#{day.id} form-control time-field",max: 23, min: 0 %>:
+                        <%= af.text_field :finished_b, class: "fib_#{day.id} form-control time-field",max: 59, min: 0 %>
                         <br>
               
                         <%= f.label :nextday_box, "日付をまたく場合はチェック" %>
@@ -155,7 +155,7 @@
                         <br>
               
                         <%= f.label :paynote, "備考欄" %>
-                        <%= af.text_field :paynote, class: "form-control " %>
+                        <%= af.text_field :paynote, class: "form-control ",maxlength: 30 %>
                     </div>
                     <div class="modal-footer">
                         <%= f.submit "保存", class: "btn btn-primary" %>

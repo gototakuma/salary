@@ -31,11 +31,12 @@ class PaysController < ApplicationController
     if pay_params.each do |id,item|
       pay = Pay.find(id)
       pay.update_attributes!(item)
-      flash[:success] = "更新しました。"
+      flash[:success] = "登録完了しました。"
       redirect_to @user
     end
     else
       redirect_to @user
+      flash[:danger] = "正しい数値を入力してください"
     end
   end
   
