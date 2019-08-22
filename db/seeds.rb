@@ -1,7 +1,5 @@
 User.create!(name: "後藤",
              email: "email@sample.com",
-             recharge: 1030000,
-             basic_salary: 1000,
              password: "password",
              password_confirmation: "password",
              recharge: 1030000,
