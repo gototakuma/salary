@@ -4,6 +4,8 @@ User.create!(name: "後藤",
              basic_salary: 1000,
              password: "password",
              password_confirmation: "password",
+             recharge: 1030000,
+             basic_salary: 1000,
              admin: true)
 
 5.times do |n|

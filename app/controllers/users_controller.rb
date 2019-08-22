@@ -28,6 +28,12 @@ class UsersController < ApplicationController
     @total_month_salary = @dates.sum(:salary)
     @total_salary = @salarys.sum(:salary)
     
+    @personal = {'name' => 'Tokyo'}
+    
+    respond_to do |format|
+      format.html
+      format.json {render :json => @personal}
+    end
   end
   
   def new

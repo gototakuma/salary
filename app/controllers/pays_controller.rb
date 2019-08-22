@@ -42,7 +42,7 @@ class PaysController < ApplicationController
   private
   
   def pay_params
-    params.permit(pays: [:started_a,:started_b,:finished_a,:finished_b,:nextday_box,:salary])[:pays]
+    params.permit(pays: [:started_a,:started_b,:finished_a,:finished_b,:nextday_box,:salary,:paynote])[:pays]
   end
 end
 

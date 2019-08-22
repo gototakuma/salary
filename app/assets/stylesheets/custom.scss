@@ -63,3 +63,71 @@ p {
   color: lightgray;
   text-decoration: none;
 }
+
+#table-center {
+  text-align: center;
+  font-size: 15px;
+  padding-top: 10px;
+}
+
+table th{
+  text-align: center;
+}
+
+.yearbutton {
+  #btright {
+    display: inline-block;
+    float: right;
+  }
+}
+
+.time-field {
+  width: 8%;
+  display: inline-block;
+}
+
+.salary-field {
+  display: inline-block;
+  width: 80%;
+}
+
+.modal-size {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.modal-size-salary {
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.white {
+ color: white;
+}
+
+#weather {
+  display: flex;
+}
+.weather-report {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+#citynameo {
+  padding-right: 40px;
+  margin-top: 20px;
+}
+
+.inline {
+  display: flex;
+}
+
+#remember-me {
+  margin-left: 1px;
+  display: flex;
+}
+
+.remember-me {
+  display: flex;
+}

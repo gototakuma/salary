@@ -13,13 +13,12 @@ gem 'bootstrap-sass'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate' 
-gem 'devise'
-gem 'omniauth'
-gem 'omniauth-facebook'
-gem 'dotenv-rails'
+gem 'rails-i18n', '~> 5.1'
+gem 'nokogiri'
+gem 'jquery-turbolinks'
 
 group :development, :test do
-  gem 'sqlite3', group: :development
+  gem 'sqlite3', '~> 1.3.6'
   gem 'byebug',  '9.0.6', platform: :mri
 end
 
