@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   before_action :logged_in_user, only: [:show,:edit,:update,:destroy]
   before_action :correct_user,   only: [:edit,:update,:show]
-  before_action :admin_user,     only: :destroy
+  before_action :admin_user,     only: [:destroy,:index]
   
   def index
     @users = User.paginate(page: params[:page])
@@ -72,8 +72,7 @@ class UsersController < ApplicationController
   end
   
   def destroy
-    @user = User.find(params[:id])
-    @user.destroy
+    @user = User.find(params[:id]).destroy
     flash[:danger] = "#{@user.name}のデータを削除しました。"
     redirect_to users_url
   end
@@ -101,6 +100,7 @@ class UsersController < ApplicationController
   end
   
   def admin_user
-    redirect_to(root_url) unless current_user.admin?
+    redirect_to root_url unless current_user.admin?
+    flash[:danger] = "管理者のみ閲覧可能ページです。"
   end
 end

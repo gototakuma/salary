@@ -5,7 +5,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li><%= link_to "トップ", login_path %></li>
         <% if logged_in? %>
-          <li><%= link_to "ユーザー一覧", users_path %></li>
+            <li><%= link_to "ユーザー一覧", users_path  if current_user.admin?%></li>
             <li><%= link_to "詳細", current_user %></li>
             <li><%= link_to "設定", edit_user_path(current_user) %></li>
             <li><%= link_to "ログアウト", logout_path, method: :delete %></li>
