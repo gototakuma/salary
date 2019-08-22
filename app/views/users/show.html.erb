@@ -237,13 +237,16 @@ $('.sta_<%=day.id%>, .stb_<%=day.id%>, .fib_<%=day.id%> , .fia_<%=day.id%>, ch_<
    var hour = ((finisha + 24) - starta)*<%= @user.basic_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
+ }else if (isNaN(NaN)) {
+   var zero = 0;
+   var result = zero;
  }
  else {
    var hour = (finisha - starta)*<%= @user.basic_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
    }
-$('.sa_<%=day.id %>').val(result);
+  $('.sa_<%=day.id %>').val(result);
 });
 <%end%>
 
