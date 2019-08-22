@@ -29,7 +29,7 @@ group :development do
 end
 
 group :production do
-  gem 'pg',  group: :production
+  gem 'pg',   '~> 0.19.0', group: :production
 end
 
 # Windows環境ではtzinfo-dataというgemを含める必要があります
