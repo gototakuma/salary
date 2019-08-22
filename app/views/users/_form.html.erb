@@ -8,10 +8,10 @@
   <%= f.email_field :email, class: "form-control" %>
   
   <%= f.label :basic_salary%>
-  <%= f.text_field :basic_salary, class: "form-control"%>
+  <%= f.number_field :basic_salary, class: "form-control",min: 1,max: 9999%>
   
   <%= f.label :recharge %>
-  <%= f.text_field :recharge, class: "form-control" %>
+  <%= f.number_field :recharge, class: "form-control",min: 1030000, max: 1300000 %>
 
   <%= f.label :password %>
   <%= f.password_field :password, class: "form-control" %>
