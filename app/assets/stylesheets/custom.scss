@@ -116,8 +116,18 @@ table th{
 
 #citynameo {
   padding-right: 40px;
+  margin-top: 20px;
 }
 
 .inline {
+  display: flex;
+}
+
+#remember-me {
+  margin-left: 1px;
+  display: flex;
+}
+
+.remember-me {
   display: flex;
 }
