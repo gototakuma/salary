@@ -13,7 +13,7 @@ gem 'bootstrap-sass'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate' 
-gem 'rails-i18n', '~> 5.1'
+gem 'rails-i18n'
 gem 'jquery-turbolinks'
 
 group :development, :test do

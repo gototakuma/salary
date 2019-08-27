@@ -229,7 +229,7 @@ $('.sta_<%=day.id%>, .stb_<%=day.id%>, .fib_<%=day.id%> , .fia_<%=day.id%>, ch_<
    var hour = (finisha - starta)*<%= @user.basic_salary %> - 1000;
    var min = Math.abs(finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
- }else if ((finisha - starta) > 8) {
+ }else if ((finisha - starta) >= 8) {
    var hour = (8*<%= @user.basic_salary %>)+(((finisha - starta) - 8)*(<%= @user.basic_salary %>*1.25))
    var min = ((finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%>)*1.25 ;
    var result = hour + Math.floor(min);
@@ -237,15 +237,13 @@ $('.sta_<%=day.id%>, .stb_<%=day.id%>, .fib_<%=day.id%> , .fia_<%=day.id%>, ch_<
    var hour = ((finisha + 24) - starta)*<%= @user.basic_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
- }else if (isNaN(NaN)) {
-   var zero = 0;
-   var result = zero;
- }
- else {
+ }else if ((finisha - starta) < 8){
    var hour = (finisha - starta)*<%= @user.basic_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
-   }
+ }else if (isNaN(NaN)) {
+   var result = 0;
+ }
   $('.sa_<%=day.id %>').val(result);
 });
 <%end%>

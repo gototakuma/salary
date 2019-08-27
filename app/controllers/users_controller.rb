@@ -100,7 +100,9 @@ class UsersController < ApplicationController
   end
   
   def admin_user
-    redirect_to root_url unless current_user.admin?
-    flash[:danger] = "管理者のみ閲覧可能ページです。"
+    unless current_user.admin?
+      flash[:danger] = "管理者のみ閲覧可能ページです。"
+      redirect_to root_url
+    end
   end
 end
