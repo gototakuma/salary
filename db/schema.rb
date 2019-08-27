@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190827150530) do
+ActiveRecord::Schema.define(version: 20190827151009) do
 
   create_table "pays", force: :cascade do |t|
     t.integer "started"
@@ -40,9 +40,6 @@ ActiveRecord::Schema.define(version: 20190827150530) do
     t.boolean "admin", default: false
     t.integer "basic_salary"
     t.integer "recharge"
-    t.string "provider"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
