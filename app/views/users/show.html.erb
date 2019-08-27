@@ -170,19 +170,6 @@
         </tr>
       <% end %><!--@dates-->
     </tbody>
-    <tfoot>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><%= @total_seconds unless @total_seconds.nil? %></td>
-        <td><%= @secondsov unless @secondsov.nil?  %></td>
-        <td>月間<%= @total_month_salary%>円</td><!--給料合計/td-->
-        <td>年間<%= @total_salary %>円</td>
-        <td>差額<%= rechargesub(@user.recharge,@salarys.sum(:salary)) %></td>
-      </tr>
-    </tfoot>
   </table>
 </div>
 
