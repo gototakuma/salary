@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-
+  
+  rescue_from ActiveRecord::RecordNotFound, with: :redirect_to_homepage
   before_action :logged_in_user, only: [:show,:edit,:update,:destroy]
   before_action :correct_user,   only: [:edit,:update,:show]
   before_action :admin_user,     only: [:destroy,:index]
@@ -92,11 +93,7 @@ class UsersController < ApplicationController
   end
   
   def correct_user
-    @user = User.find_by(id: params[:id])
-    if ActiveRecord::RecordNotFound
-      flash[:danger] = "ユーザーデータは存在しません。"
-      redirect_to(root_url) 
-    end
+    @user = User.find(params[:id])
     unless current_user?(@user) || current_user.admin?
       flash[:danger] = "他人のデータは観覧できません。"
       redirect_to(root_url) 
@@ -108,5 +105,10 @@ class UsersController < ApplicationController
       flash[:danger] = "管理者のみ閲覧可能ページです。"
       redirect_to root_url
     end
+  end
+  
+  def redirect_to_homepage
+    flash[:danger] = "ユーザーデータが存在しません"
+    redirect_to :root
   end
 end
