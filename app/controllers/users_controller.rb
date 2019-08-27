@@ -93,6 +93,10 @@ class UsersController < ApplicationController
   
   def correct_user
     @user = User.find_by(id: params[:id])
+    if ActiveRecord::RecordNotFound
+      flash[:danger] = "ユーザーデータは存在しません。"
+      redirect_to(root_url) 
+    end
     unless current_user?(@user) || current_user.admin?
       flash[:danger] = "他人のデータは観覧できません。"
       redirect_to(root_url) 
