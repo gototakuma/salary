@@ -19,7 +19,7 @@
               <h1>今日のシフト時間入力</h1>
             </div>
             <div class="modal-body">
-              <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
+              <%= form_with(model: @user,url: update_pays_path(params: {id: @user.id})) do |f| %>
           
               <div class="modal-size">日付 <%= day.worked_on.to_s(:date) %></div>
             
@@ -133,7 +133,7 @@
                       <h1>今日のシフト時間編集</h1>
                     </div>
                     <div class="modal-body">
-                      <%= form_for(@user,url: update_pays_path(params: {id: @user.id})) do |f| %>
+                      <%= form_with(model: @user,url: update_pays_path(params: {id: @user.id})) do |f| %>
           
                         <div class="modal-size">日付 <%= day.worked_on.to_s(:date) %></div>
             
