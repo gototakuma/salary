@@ -220,11 +220,28 @@ $('.sta_<%=day.id%>, .stb_<%=day.id%>, .fib_<%=day.id%> , .fia_<%=day.id%>, ch_<
    var hour = (8*<%= @user.basic_salary %>)+(((finisha - starta) - 8)*(<%= @user.basic_salary %>*1.25))
    var min = ((finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%>)*1.25 ;
    var result = hour + Math.floor(min);
- }else if ($('.ch_<%=day.id%>').prop('checked') == true) {
-   var hour = ((finisha + 24) - starta)*<%= @user.basic_salary %>;
+ }else if (starta >= 22 && finisha <= 5 && $('.ch_<%=day.id%>').prop('checked') == true) {
+   var hour = ((finisha + 24) - starta)*<%= @user.night_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
- }else if ((finisha - starta) < 8){
+ }else if  (starta >= 22 && finisha > 5 && $('.ch_<%=day.id%>').prop('checked') == true) {
+   var hour = (7*<%= @user.night_salary %>)+(((finisha + 17) - starta)*<%= @user.basic_salary %>) ;
+   var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }else if (starta < 22 && finisha >= 22) {
+   var hour = ((22 - starta)*<%= @user.basic_salary %>)+((24-finisha)*<%= @user.night_salary %>)
+   var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }else if (starta < 22 && finisha > 5 && $('.ch_<%=day.id%>').prop('checked') == true){
+   var hour = ((22 - starta)*<%= @user.basic_salary %>)+(7*<%= @user.night_salary %>)+((finisha-5)*<%= @user.basic_salary %>)
+   var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }else if (starta < 22 && finisha == 0) {
+   var hour = ((22 - starta)*<%= @user.basic_salary %>)+(2*<%= @user.night_salary %>);
+   var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
+   var result = hour + Math.floor(min);
+ }
+ else if ((finisha - starta) < 8){
    var hour = (finisha - starta)*<%= @user.basic_salary %>;
    var min = (finishb - startb)*<%= format("%.2f",(@user.basic_salary / 60.0))%> ;
    var result = hour + Math.floor(min);
