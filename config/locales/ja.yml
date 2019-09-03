@@ -11,6 +11,7 @@ ja:
         job: 勤務先
         admin: 管理者
         basic_salary: 基本給
+        night_salary: 深夜時給(22時~5時)
         recharge: 扶養額
         password_confirmation: パスワード(確認)
       pay:

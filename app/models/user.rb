@@ -43,4 +43,5 @@ class User < ApplicationRecord
   
   validates :recharge, presence: true
   validates :basic_salary, presence: true
+  validates :night_salary, presence: true
 end
